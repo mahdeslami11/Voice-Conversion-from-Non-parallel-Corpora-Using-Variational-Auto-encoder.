@@ -155,7 +155,7 @@ Tensorflow was in version 0.10 or earlier, so I decided to refactor my code and 
  - [ ] GV
  - [ ] `build.py` should accept subsets of speakers
 # #1 Abstract
-We propose a flexible framework for spectral conversion
+ In this propose a flexible framework for spectral conversion
 (SC) that facilitates training with unaligned corpora.
 Many SC frameworks require parallel corpora, phonetic alignments,
 or explicit frame-wise correspondence for learning conversion
@@ -172,3 +172,23 @@ alignments to train a spectral conversion system. We report
 objective and subjective evaluations to validate our proposed
 method and compare it to SC methods that have access to aligned
 corpora.
+# #2 suggested method
+To improve the performance of this transformation function, another transformation can be used using the Fourier transformation function, which is as follows.
+# #3 fourier transform
+def convert_f0(f0, src, trg):
+    mu_s, std_s = np.fromfile(os.path.join('./etc', '{}.npf'.format(src)), np.float32)
+    mu_t, std_t = np.fromfile(os.path.join('./etc', '{}.npf'.format(trg)), np.float32)
+    lf0 = tf.where(f0 > 1., tf.log(f0), f0)
+    lf0 = tf.where(lf0 > 1., (lf0 - mu_s)/std_s * std_t + mu_t, lf0)
+    lf0 = tf.where(lf0 > 1., tf.exp(lf0), lf0)
+    return lf0
+# #4 Result
+By moving the transformations, the output result was palpable in the resolution of the original sound, and the encoding can be considered valid for this audio data sample.
+# #5 refrences 
+Chin-Cheng Hsu, Hsin-Te Hwang, Yi-Chiao Wu, Yu Tsaoy and Hsin-Min Wang
+ Institute of Information Science, Academia Sinica, Taipei, Taiwan Voice Conversion from Non-parallel Corpora Using
+Variational Auto-encoder.
+# #6 introduce
+My name is Nima Azimi and I'm M.sc of biomedical engineering student , I've choosen this type of project becuase of the importance of the seceurity of the signal data and it's nessecarry to keep them safe . 
+# #7
+In the end, I would like to thank Dr. Islami, who introduced me to this field and guided me.
